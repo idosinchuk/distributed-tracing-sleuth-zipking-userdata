@@ -2,8 +2,9 @@ package com.idosinchuk.distributedtracing.userdata.dto;
 
 import lombok.Data;
 
+
 @Data
-public class UserDTO {
+public class User {
 
     private Integer userId;
 

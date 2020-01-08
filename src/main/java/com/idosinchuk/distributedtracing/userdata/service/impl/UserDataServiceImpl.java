@@ -1,56 +1,60 @@
 package com.idosinchuk.distributedtracing.userdata.service.impl;
 
-import com.idosinchuk.distributedtracing.userdata.dto.AddressDTO;
-import com.idosinchuk.distributedtracing.userdata.dto.UserDTO;
-import com.idosinchuk.distributedtracing.userdata.dto.UserDataDTO;
-import com.idosinchuk.distributedtracing.userdata.service.UserDataService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.idosinchuk.distributedtracing.userdata.dto.Address;
+import com.idosinchuk.distributedtracing.userdata.dto.User;
+import com.idosinchuk.distributedtracing.userdata.dto.UserData;
+import com.idosinchuk.distributedtracing.userdata.service.UserDataService;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class UserDataServiceImpl implements UserDataService {
 
-    @Autowired
-    private RestTemplate restTemplate;
+	private RestTemplate restTemplate;
 
-    @Value("${address.service.url}")
-    private String addressServiceURL;
+	@Value("${address.service.url}")
+	private String addressServiceURL;
 
-    @Value("${user.service.url}")
-    private String userServiceURL;
+	@Value("${user.service.url}")
+	private String userServiceURL;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserDataServiceImpl.class);
+	@Autowired
+	public UserDataServiceImpl(RestTemplate restTemplate) {
+		this.restTemplate = restTemplate;
+	}
 
-    @Override
-    public UserDataDTO getUserData(Integer userId) throws Exception {
-        UserDataDTO userDataDTO = new UserDataDTO();
+	@Override
+	public UserData getUserData(Integer userId) {
 
-        LOGGER.info("Fetching User and Address details for userId: {}", userId);
+		log.info("Fetching User and Address details by userId: {}", userId);
 
-        UserDTO user = getUser(userId);
+		User user = getUser(userId);
 
-        if (user != null) {
-            userDataDTO.setUser(user);
-            userDataDTO.setAddress(getAddress(user.getAddressId()));
-        } else {
-            LOGGER.error("No User found for, userId: {}", userId);
-        }
+		return UserData.builder().user(user).address(getAddress(user.getAddressId())).build();
+	}
 
-        return userDataDTO;
-    }
+	private User getUser(Integer userId) {
 
-    private AddressDTO getAddress(Integer addressId) {
-        ResponseEntity<AddressDTO> addressDTOResponse = restTemplate.getForEntity(addressServiceURL + addressId, AddressDTO.class);
-        return addressDTOResponse.getBody();
-    }
+		log.info("Call restTemplate to obtain User data by userId: {}", userId);
 
-    private UserDTO getUser(Integer userId) {
-        ResponseEntity<UserDTO> userDTOResponse = restTemplate.getForEntity(userServiceURL + userId, UserDTO.class);
-        return userDTOResponse.getBody();
-    }
+		ResponseEntity<User> user = restTemplate.getForEntity(userServiceURL + userId, User.class);
+
+		return user.getBody();
+	}
+
+	private Address getAddress(Integer addressId) {
+
+		log.info("Call restTemplate to obtain Address data by addressId: {}", addressId);
+
+		ResponseEntity<Address> address = restTemplate.getForEntity(addressServiceURL + addressId, Address.class);
+
+		return address.getBody();
+	}
 }

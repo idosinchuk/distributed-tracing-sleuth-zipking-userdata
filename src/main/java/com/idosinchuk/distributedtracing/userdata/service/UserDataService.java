@@ -1,7 +1,7 @@
 package com.idosinchuk.distributedtracing.userdata.service;
 
-import com.idosinchuk.distributedtracing.userdata.dto.UserDataDTO;
+import com.idosinchuk.distributedtracing.userdata.dto.UserData;
 
 public interface UserDataService {
-    UserDataDTO getUserData(Integer userId) throws Exception;
+    UserData getUserData(Integer userId);
 }
