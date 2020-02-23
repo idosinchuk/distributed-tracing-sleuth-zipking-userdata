@@ -33,8 +33,6 @@ public class UserDataServiceImpl implements UserDataService {
 	@Override
 	public UserData getUserData(Integer userId) {
 
-		log.info("Fetching User and Address details by userId: {}", userId);
-
 		User user = getUser(userId);
 
 		return UserData.builder().user(user).address(getAddress(user.getAddressId())).build();
@@ -42,7 +40,7 @@ public class UserDataServiceImpl implements UserDataService {
 
 	private User getUser(Integer userId) {
 
-		log.info("Call restTemplate to obtain User data by userId: {}", userId);
+		log.info("Call to User service with userId: {}", userId);
 
 		ResponseEntity<User> user = restTemplate.getForEntity(userServiceURL + userId, User.class);
 
@@ -51,7 +49,7 @@ public class UserDataServiceImpl implements UserDataService {
 
 	private Address getAddress(Integer addressId) {
 
-		log.info("Call restTemplate to obtain Address data by addressId: {}", addressId);
+		log.info("Call to Address service with userId: {}", addressId);
 
 		ResponseEntity<Address> address = restTemplate.getForEntity(addressServiceURL + addressId, Address.class);
 

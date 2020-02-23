@@ -58,12 +58,6 @@
 			<artifactId>spring-cloud-starter-sleuth</artifactId>
 		</dependency>
 
-		<!-- Elasticsearch -->
-		<dependency>
-			<groupId>io.zipkin.java</groupId>
-			<artifactId>zipkin-autoconfigure-storage-elasticsearch</artifactId>
-			<version>1.2.1</version>
-		</dependency>
 	</dependencies>
 
 	<!-- Dependency Management -->

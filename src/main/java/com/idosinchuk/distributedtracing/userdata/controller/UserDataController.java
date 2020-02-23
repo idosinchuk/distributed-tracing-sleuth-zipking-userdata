@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.idosinchuk.distributedtracing.userdata.dto.UserData;
 import com.idosinchuk.distributedtracing.userdata.service.UserDataService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 public class UserDataController {
 
@@ -17,6 +20,9 @@ public class UserDataController {
 
 	@GetMapping(value = "/userData/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public UserData getUserData(@PathVariable Integer userId) {
+		
+		log.info("Hello from UserData Service with userId: {}", userId);
+		
 		return userDataService.getUserData(userId);
 	}
 }
