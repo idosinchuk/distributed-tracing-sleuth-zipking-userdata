@@ -1,7 +1,9 @@
 package com.idosinchuk.distributedtracing.userdata.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,10 +21,12 @@ public class UserDataController {
 	private UserDataService userDataService;
 
 	@GetMapping(value = "/userData/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserData getUserData(@PathVariable Integer userId) {
+	public ResponseEntity<UserData> getUserData(@PathVariable Integer userId) {
 		
 		log.info("Hello from UserData Service with userId: {}", userId);
-		
-		return userDataService.getUserData(userId);
+		UserData response = userDataService.getUserData(userId);
+	
+		return new ResponseEntity<>(response, HttpStatus.OK);
+
 	}
 }
